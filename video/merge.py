@@ -19,14 +19,14 @@ class MergeHandler(NodeHandler):
     def process(self, inputs, config):
         """Process the node.
         Args:
-            inputs: Dict containing 'video_paths' (list of paths)
-            config: Dict (not used here, but for compatibility)
+            inputs: Dict (unused, for compatibility)
+            config: Dict containing 'video_paths' (list of paths)
         Returns:
             A dictionary with the execution result
         """
         try:
-            logger.info(f"Merge - Processing with inputs: {inputs}")
-            video_paths = inputs.get("video_paths") or config.get("video_paths")
+            logger.info(f"Merge - Processing with config: {config}")
+            video_paths = config.get("video_paths")
             if not video_paths or not isinstance(video_paths, list) or len(video_paths) < 2:
                 logger.error("At least two video paths must be provided for merging.")
                 return {"status": "error", "error": "At least two video paths must be provided for merging."}
@@ -114,7 +114,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Merge multiple video clips into one.")
     parser.add_argument("--video_paths", nargs='+', required=True, help="Paths to the input video files (at least two)")
     args = parser.parse_args()
-    inputs = {"video_paths": args.video_paths}
-    config = {}
+    inputs = {}
+    config = {
+        "video_paths": args.video_paths
+    }
     result = process(inputs, config)
     print(result)

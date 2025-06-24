@@ -26,11 +26,11 @@ class AddBGMHandler(NodeHandler):
             A dictionary with the execution result
         """
         try:
-            logger.info(f"AddBGM - Processing with inputs: {inputs}")
-            video_path = inputs.get("video_path") or config.get("video_path")
-            music_path = inputs.get("music_path") or config.get("music_path")
-            music_volume = float(inputs.get("music_volume", config.get("music_volume", 0.5)))
-            video_volume = float(inputs.get("video_volume", config.get("video_volume", 1.0)))
+            logger.info(f"AddBGM - Processing with config: {config}")
+            video_path = config.get("video_path")
+            music_path = config.get("music_path")
+            music_volume = float(config.get("music_volume", 0.5))
+            video_volume = float(config.get("video_volume", 1.0))
             if not video_path or not os.path.exists(video_path):
                 logger.error(f"Input video file not found: {video_path}")
                 return {"status": "error", "error": f"Input video not found: {video_path}"}
@@ -137,12 +137,12 @@ if __name__ == "__main__":
     parser.add_argument("--music_volume", type=float, default=0.5, help="Music volume (0.0 to 1.0)")
     parser.add_argument("--video_volume", type=float, default=1.0, help="Original video volume (0.0 to 1.0)")
     args = parser.parse_args()
-    inputs = {
+    inputs = {}
+    config = {
         "video_path": args.video_path,
         "music_path": args.music_path,
         "music_volume": args.music_volume,
         "video_volume": args.video_volume,
     }
-    config = {}
     result = process(inputs, config)
     print(result)
